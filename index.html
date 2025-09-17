@@ -9,20 +9,29 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Nunito', sans-serif; }
-        @keyframes happy-bounce {
-            0%, 100% { transform: translateY(0) scale(var(--avatar-scale, 1)); }
-            50% { transform: translateY(-15px) scale(var(--avatar-scale, 1)); }
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            /* Evita que a tela inteira se mova ao arrastar no celular */
+            overscroll-behavior: none;
         }
-        .happy { animation: happy-bounce 0.5s ease-in-out; }
-        @keyframes sick-wobble {
-            0%, 100% { transform: translateX(0) rotate(0deg) scale(var(--avatar-scale, 1)); }
-            25% { transform: translateX(-5px) rotate(-3deg) scale(var(--avatar-scale, 1)); }
-            75% { transform: translateX(5px) rotate(3deg) scale(var(--avatar-scale, 1)); }
-        }
-        .sick { animation: sick-wobble 0.5s ease-in-out; }
         .dragging { opacity: 0.5; transform: scale(1.1); }
-        .mouth-hover { transform: scale(1.5); background-color: #f87171; }
+        .mouth-hover { 
+            transform: scale(2.2); /* BOCA ABRE BEM MAIS */
+            height: 2rem; /* Aumenta a altura para um efeito melhor */
+            background-color: #f87171; 
+        }
+
+        /* ESTILOS PARA BOCA FELIZ/TRISTE */
+        .mouth-happy {
+            height: 1.25rem; /* h-5 */
+            border-radius: 0 0 40px 40px; /* Curva para cima (sorriso) */
+            transform: translateY(-4px);
+        }
+        .mouth-sad {
+            height: 1.25rem; /* h-5 */
+            border-radius: 40px 40px 0 0; /* Curva para baixo (triste) */
+            transform: translateY(4px);
+        }
     </style>
 </head>
 <body class="bg-emerald-50 text-gray-800 antialiased">
@@ -31,12 +40,12 @@
 
         <!-- Título e Gerenciamento de Sessão -->
         <header class="text-center mb-4">
-            <h1 class="text-4xl md:text-5xl font-black text-emerald-600">Comidinha</h1>
-            <p class="text-lg text-emerald-500">Arraste a comida para a boca do amiguinho!</p>
-            <div class="mt-4 p-3 bg-yellow-200 border-2 border-yellow-400 rounded-lg">
-                <span class="font-bold text-sm text-yellow-800">ID do Participante:</span>
-                <code id="participant-id" class="text-sm text-yellow-900 font-mono"></code>
-                <button id="new-session-btn" class="ml-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded-lg text-xs">Nova Sessão</button>
+            <h1 class="text-4xl md:text-5xl font-black text-[#01b3e4]">Comidinha</h1>
+            <p class="text-lg text-[#01b3e4]">Arraste a comida para a boca do amiguinho!</p>
+            <div class="mt-4 p-3 bg-cyan-100 border-2 border-cyan-300 rounded-lg">
+                <span class="font-bold text-sm text-cyan-800">ID do Participante:</span>
+                <code id="participant-id" class="text-sm text-cyan-900 font-mono"></code>
+                <button id="new-session-btn" class="ml-2 bg-[#01b3e4] hover:bg-[#009dcc] text-white font-bold py-1 px-3 rounded-lg text-xs">Nova Sessão</button>
             </div>
         </header>
 
@@ -44,17 +53,20 @@
         <main class="w-full max-w-lg bg-white rounded-3xl shadow-lg p-6 flex flex-col items-center">
             <!-- Avatar -->
             <div id="avatar-container" class="relative w-48 h-48 mb-4">
-                <div id="avatar" class="w-full h-full bg-orange-200 rounded-full flex items-center justify-center transition-transform duration-500 relative overflow-hidden" style="--avatar-scale: 1;">
+                <div id="avatar" class="w-full h-full bg-orange-200 rounded-full flex items-center justify-center relative overflow-hidden transition-transform duration-500">
+                    <!-- Cabelo -->
                     <div class="absolute -top-2 w-[110%] h-1/2">
                         <div class="absolute w-16 h-16 bg-gray-800 rounded-full -top-4 left-1/2 -translate-x-1/2 transform rotate-12"></div>
                         <div class="absolute w-20 h-20 bg-gray-800 rounded-full -top-6 left-1/4 -translate-x-1/2 transform -rotate-12"></div>
                         <div class="absolute w-20 h-20 bg-gray-800 rounded-full -top-6 right-1/4 translate-x-1/2 transform rotate-12"></div>
                     </div>
+                    <!-- Olhos -->
                     <div class="flex gap-6 z-10 relative">
                         <div class="w-6 h-6 bg-white rounded-full border-2 border-gray-800 flex items-center justify-center"><div class="w-3 h-3 bg-gray-800 rounded-full"></div></div>
                         <div class="w-6 h-6 bg-white rounded-full border-2 border-gray-800 flex items-center justify-center"><div class="w-3 h-3 bg-gray-800 rounded-full"></div></div>
                     </div>
-                    <div id="mouth" class="absolute w-12 h-6 bg-red-500 rounded-full bottom-8 z-10 transition-transform duration-300"></div>
+                    <!-- Boca -->
+                    <div id="mouth" class="absolute w-12 h-6 bg-red-500 rounded-full bottom-8 z-10 transition-all duration-300"></div>
                 </div>
             </div>
             <!-- Mensagem de feedback -->
@@ -79,7 +91,7 @@
             <p class="text-gray-600 mb-6">Isso irá gerar uma nova ID de participante e limpar o log local. Os dados já enviados não serão afetados.</p>
             <div class="flex justify-center gap-4">
                 <button id="modal-cancel-btn" class="py-2 px-6 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold">Cancelar</button>
-                <button id="modal-confirm-btn" class="py-2 px-6 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-semibold">Confirmar</button>
+                <button id="modal-confirm-btn" class="py-2 px-6 bg-[#01b3e4] hover:bg-[#009dcc] text-white rounded-lg font-semibold">Confirmar</button>
             </div>
         </div>
     </div>
@@ -107,7 +119,6 @@
             initializeGame(db);
         } catch (error) {
             console.error("Erro ao inicializar o Firebase:", error);
-            alert("Não foi possível conectar ao banco de dados. Verifique a configuração do Firebase no código.");
         }
         
         function initializeGame(db) {
@@ -122,13 +133,13 @@
             const modalConfirmBtn = document.getElementById('modal-confirm-btn');
             const modalCancelBtn = document.getElementById('modal-cancel-btn');
 
-            let avatarScale = 1;
             let sessionDataLog = [];
             let choiceStartTime = null;
             let draggedFoodElement = null;
             let currentParticipantId = null;
+            let touchGhostElement = null; 
+            let avatarScale = 0.5; // Variável para controlar o tamanho do avatar
 
-            // --- LISTA DE ALIMENTOS COM FOTOS REAIS ---
             const foods = [
                 { id: 'food-apple', name: 'Maçã', type: 'healthy', imageUrl: 'https://i.ibb.co/v6TM7Lqt/Maca-PNG-Transparente-Sem-Fundo.png' },
                 { id: 'food-broccoli', name: 'Brócolis', type: 'healthy', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Broccoli_and_cross_section_edit.jpg/330px-Broccoli_and_cross_section_edit.jpg' },
@@ -152,6 +163,9 @@
                 currentParticipantId = `P-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
                 participantIdEl.textContent = currentParticipantId;
                 sessionDataLog = [];
+                mouth.className = "absolute w-12 h-6 bg-red-500 rounded-full bottom-8 z-10 transition-all duration-300"; // Reset mouth
+                avatarScale = 0.5; // Define o tamanho inicial
+                avatar.style.transform = `scale(${avatarScale})`; // Aplica o tamanho inicial
                 updateDataLog();
                 refreshFoodSelection();
                 confirmModal.classList.add('hidden');
@@ -174,7 +188,6 @@
                 }
             }
             
-            // --- FUNÇÃO DE RENDERIZAÇÃO ATUALIZADA ---
             function renderFoods(foodsToRender) {
                 foodSelectionEl.innerHTML = '';
                 foodsToRender.forEach(food => {
@@ -183,11 +196,11 @@
                     foodEl.draggable = true;
                     foodEl.dataset.type = food.type;
                     foodEl.dataset.name = food.name;
-                    // Alterado para usar <img> em vez de <span> de emoji
                     foodEl.innerHTML = `<img src="${food.imageUrl}" alt="${food.name}" class="w-16 h-16 sm:w-20 sm:h-20 object-contain pointer-events-none">`;
                     foodSelectionEl.appendChild(foodEl);
                     foodEl.addEventListener('dragstart', handleDragStart);
                     foodEl.addEventListener('dragend', handleDragEnd);
+                    foodEl.addEventListener('touchstart', handleTouchStart, { passive: false });
                 });
             }
 
@@ -201,26 +214,15 @@
             }
 
             function updateDataLog(lastEvent) {
-                // Se for o início da sessão, exibe uma mensagem inicial.
-                if (!lastEvent) {
-                    dataLogEl.textContent = 'Aguardando a primeira interação...\n';
-                    return;
-                }
-
-                // Limpa a mensagem inicial no primeiro evento real.
-                if (sessionDataLog.length === 1) {
-                    dataLogEl.textContent = '';
-                }
-
+                if (!lastEvent) { dataLogEl.textContent = 'Aguardando a primeira interação...\n'; return; }
+                if (sessionDataLog.length === 1) { dataLogEl.textContent = ''; }
                 const eventType = lastEvent.event === 'aceito' ? 'aceito' : 'rejeitado';
                 const foodName = lastEvent.foodName;
                 const choiceTime = lastEvent.timeToChoose;
                 const timestamp = new Date(lastEvent.localTimestamp).toLocaleTimeString('pt-BR');
-
                 const logText = `[${timestamp}] Alimento "${foodName}" foi ${eventType} em ${choiceTime}s.\n`;
-
-                dataLogEl.textContent += logText; // Adiciona a nova linha de texto
-                dataLogEl.scrollTop = dataLogEl.scrollHeight; // Rola para o final
+                dataLogEl.textContent += logText;
+                dataLogEl.scrollTop = dataLogEl.scrollHeight;
             }
 
             function logEvent(eventType, food, choiceTime) {
@@ -231,11 +233,10 @@
                     foodType: food.dataset.type,
                     timeToChoose: parseFloat(choiceTime.toFixed(2)),
                 };
-                // Adiciona o timestamp local para uso imediato na tela
                 const logEntryForDisplay = {...logEntry, localTimestamp: new Date().toISOString()};
                 sessionDataLog.push(logEntryForDisplay);
-                updateDataLog(logEntryForDisplay); // Passa o evento mais recente para ser exibido
-                saveDataToFirebase(logEntry); // Salva o evento sem o timestamp local no Firebase
+                updateDataLog(logEntryForDisplay);
+                saveDataToFirebase(logEntry);
             }
             
             function showMessage(text, isPositive) {
@@ -247,18 +248,18 @@
             }
 
             function updateAvatar(type) {
-                avatar.classList.remove('happy', 'sick');
+                mouth.classList.remove('mouth-happy', 'mouth-sad');
                 void avatar.offsetWidth; 
                 if (type === 'healthy') {
-                    avatarScale = Math.min(2.0, avatarScale + 0.1);
-                    avatar.classList.add('happy');
+                    avatarScale = Math.min(2.0, avatarScale + 0.1); // Cresce, com limite de 200%
+                    mouth.classList.add('mouth-happy');
                     showMessage("Que delícia!", true);
                 } else {
-                    avatarScale = Math.max(0.5, avatarScale - 0.1);
-                    avatar.classList.add('sick');
+                    avatarScale = Math.max(0.3, avatarScale - 0.1); // Encolhe, com limite de 30%
+                    mouth.classList.add('mouth-sad');
                     showMessage("Não me sinto bem...", false);
                 }
-                avatar.style.transform = `scale(${avatarScale})`;
+                avatar.style.transform = `scale(${avatarScale})`; // Aplica o novo tamanho
             }
 
             function handleDragStart(e) {
@@ -291,14 +292,79 @@
                     const choiceTime = (Date.now() - choiceStartTime) / 1000;
                     logEvent('aceito', draggedFoodElement, choiceTime);
                     updateAvatar(draggedFoodElement.dataset.type);
-                    draggedFoodElement.style.display = 'none'; // Esconde o elemento
-                    setTimeout(refreshFoodSelection, 500);
+                    draggedFoodElement.style.visibility = 'hidden'; // Esconde o item
+                    setTimeout(refreshFoodSelection, 200); // Atualiza a lista
                 }
+            }
+
+            function handleTouchStart(e) {
+                e.preventDefault();
+                draggedFoodElement = e.target.closest('[draggable]');
+                if (!draggedFoodElement) return;
+                
+                choiceStartTime = Date.now();
+                const touch = e.touches[0];
+                
+                touchGhostElement = draggedFoodElement.cloneNode(true);
+                touchGhostElement.style.position = 'absolute';
+                touchGhostElement.style.zIndex = '1000';
+                touchGhostElement.style.pointerEvents = 'none';
+                document.body.appendChild(touchGhostElement);
+                
+                touchGhostElement.style.left = `${touch.clientX - touchGhostElement.offsetWidth / 2}px`;
+                touchGhostElement.style.top = `${touch.clientY - touchGhostElement.offsetHeight / 2}px`;
+                
+                draggedFoodElement.classList.add('dragging');
+            }
+
+            function handleTouchMove(e) {
+                e.preventDefault();
+                if (!touchGhostElement) return;
+                const touch = e.touches[0];
+                touchGhostElement.style.left = `${touch.clientX - touchGhostElement.offsetWidth / 2}px`;
+                touchGhostElement.style.top = `${touch.clientY - touchGhostElement.offsetHeight / 2}px`;
+
+                const mouthRect = mouth.getBoundingClientRect();
+                if (touch.clientX > mouthRect.left && touch.clientX < mouthRect.right &&
+                    touch.clientY > mouthRect.top && touch.clientY < mouthRect.bottom) {
+                    mouth.classList.add('mouth-hover');
+                } else {
+                    mouth.classList.remove('mouth-hover');
+                }
+            }
+
+            function handleTouchEnd(e) {
+                if (!draggedFoodElement || !touchGhostElement) return;
+
+                document.body.removeChild(touchGhostElement);
+                touchGhostElement = null;
+                draggedFoodElement.classList.remove('dragging');
+                
+                const touch = e.changedTouches[0];
+                const mouthRect = mouth.getBoundingClientRect();
+                const choiceTime = (Date.now() - choiceStartTime) / 1000;
+
+                mouth.classList.remove('mouth-hover'); 
+
+                if (touch.clientX > mouthRect.left && touch.clientX < mouthRect.right &&
+                    touch.clientY > mouthRect.top && touch.clientY < mouthRect.bottom) {
+                    draggedFoodElement.dataset.dropped = 'true';
+                    logEvent('aceito', draggedFoodElement, choiceTime);
+                    updateAvatar(draggedFoodElement.dataset.type);
+                    draggedFoodElement.style.visibility = 'hidden'; // Esconde o item
+                    setTimeout(refreshFoodSelection, 200); // Atualiza a lista
+                } else {
+                    logEvent('rejeitado', draggedFoodElement, choiceTime);
+                }
+                draggedFoodElement = null;
             }
 
             mouth.addEventListener('dragover', handleDragOver);
             mouth.addEventListener('dragleave', handleDragLeave);
             mouth.addEventListener('drop', handleDrop);
+            
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd);
             
             newSessionBtn.addEventListener('click', () => confirmModal.classList.remove('hidden'));
             modalCancelBtn.addEventListener('click', () => confirmModal.classList.add('hidden'));
