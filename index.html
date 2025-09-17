@@ -262,6 +262,20 @@
                 avatar.style.transform = `scale(${avatarScale})`; // Aplica o novo tamanho
             }
 
+            // --- Lógica de Arrastar e Soltar ---
+            function processSuccessfulDrop(element) {
+                if (!element) return;
+                const choiceTime = (Date.now() - choiceStartTime) / 1000;
+                
+                logEvent('aceito', element, choiceTime);
+                updateAvatar(element.dataset.type);
+                
+                element.dataset.dropped = 'true'; // Previne log de 'rejeitado'
+                element.style.display = 'none'; // **FIX:** Usar display:none é mais robusto
+                
+                setTimeout(refreshFoodSelection, 200);
+            }
+
             function handleDragStart(e) {
                 draggedFoodElement = e.target.closest('[draggable]');
                 draggedFoodElement.classList.add('dragging');
@@ -287,14 +301,7 @@
             function handleDrop(e) {
                 e.preventDefault();
                 mouth.classList.remove('mouth-hover');
-                if (draggedFoodElement) {
-                    draggedFoodElement.dataset.dropped = 'true';
-                    const choiceTime = (Date.now() - choiceStartTime) / 1000;
-                    logEvent('aceito', draggedFoodElement, choiceTime);
-                    updateAvatar(draggedFoodElement.dataset.type);
-                    draggedFoodElement.style.visibility = 'hidden'; // Esconde o item
-                    setTimeout(refreshFoodSelection, 200); // Atualiza a lista
-                }
+                processSuccessfulDrop(draggedFoodElement);
             }
 
             function handleTouchStart(e) {
@@ -306,6 +313,7 @@
                 const touch = e.touches[0];
                 
                 touchGhostElement = draggedFoodElement.cloneNode(true);
+                touchGhostElement.classList.add('dragging');
                 touchGhostElement.style.position = 'absolute';
                 touchGhostElement.style.zIndex = '1000';
                 touchGhostElement.style.pointerEvents = 'none';
@@ -342,18 +350,14 @@
                 
                 const touch = e.changedTouches[0];
                 const mouthRect = mouth.getBoundingClientRect();
-                const choiceTime = (Date.now() - choiceStartTime) / 1000;
-
+                
                 mouth.classList.remove('mouth-hover'); 
 
                 if (touch.clientX > mouthRect.left && touch.clientX < mouthRect.right &&
                     touch.clientY > mouthRect.top && touch.clientY < mouthRect.bottom) {
-                    draggedFoodElement.dataset.dropped = 'true';
-                    logEvent('aceito', draggedFoodElement, choiceTime);
-                    updateAvatar(draggedFoodElement.dataset.type);
-                    draggedFoodElement.style.visibility = 'hidden'; // Esconde o item
-                    setTimeout(refreshFoodSelection, 200); // Atualiza a lista
+                    processSuccessfulDrop(draggedFoodElement);
                 } else {
+                    const choiceTime = (Date.now() - choiceStartTime) / 1000;
                     logEvent('rejeitado', draggedFoodElement, choiceTime);
                 }
                 draggedFoodElement = null;
