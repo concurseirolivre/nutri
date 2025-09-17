@@ -40,8 +40,8 @@
 
         <!-- Título e Gerenciamento de Sessão -->
         <header class="text-center mb-4">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-[#01b3e4]">Comidinha</h1>
-            <p class="text-base sm:text-lg text-[#01b3e4]">Arraste a comida para a boca do amiguinho!</p>
+            <h1 class="text-4xl md:text-5xl font-black text-[#01b3e4]">Comidinha</h1>
+            <p class="text-lg text-[#01b3e4]">Arraste a comida para a boca do amiguinho!</p>
             <div class="mt-4 p-3 bg-cyan-100 border-2 border-cyan-300 rounded-lg">
                 <span class="font-bold text-sm text-cyan-800">ID do Participante:</span>
                 <code id="participant-id" class="text-sm text-cyan-900 font-mono"></code>
@@ -50,36 +50,36 @@
         </header>
 
         <!-- Área Principal do Jogo -->
-        <main class="w-full max-w-lg bg-white rounded-3xl shadow-lg p-4 sm:p-6 flex flex-col items-center">
+        <main class="w-full max-w-lg bg-white rounded-3xl shadow-lg p-6 flex flex-col items-center">
             <!-- Avatar -->
-            <div id="avatar-container" class="relative w-36 h-36 sm:w-48 sm:h-48 mb-4">
+            <div id="avatar-container" class="relative w-48 h-48 mb-4">
                 <div id="avatar" class="w-full h-full bg-orange-200 rounded-full flex items-center justify-center relative overflow-hidden transition-transform duration-500">
                     <!-- Cabelo -->
                     <div class="absolute -top-2 w-[110%] h-1/2">
-                        <div class="absolute w-12 h-12 sm:w-16 sm:h-16 bg-gray-800 rounded-full -top-4 left-1/2 -translate-x-1/2 transform rotate-12"></div>
-                        <div class="absolute w-16 h-16 sm:w-20 sm:h-20 bg-gray-800 rounded-full -top-6 left-1/4 -translate-x-1/2 transform -rotate-12"></div>
-                        <div class="absolute w-16 h-16 sm:w-20 sm:h-20 bg-gray-800 rounded-full -top-6 right-1/4 translate-x-1/2 transform rotate-12"></div>
+                        <div class="absolute w-16 h-16 bg-gray-800 rounded-full -top-4 left-1/2 -translate-x-1/2 transform rotate-12"></div>
+                        <div class="absolute w-20 h-20 bg-gray-800 rounded-full -top-6 left-1/4 -translate-x-1/2 transform -rotate-12"></div>
+                        <div class="absolute w-20 h-20 bg-gray-800 rounded-full -top-6 right-1/4 translate-x-1/2 transform rotate-12"></div>
                     </div>
                     <!-- Olhos -->
-                    <div class="flex gap-4 sm:gap-6 z-10 relative">
-                        <div class="w-5 h-5 sm:w-6 sm:h-6 bg-white rounded-full border-2 border-gray-800 flex items-center justify-center"><div class="w-2 h-2 sm:w-3 sm:h-3 bg-gray-800 rounded-full"></div></div>
-                        <div class="w-5 h-5 sm:w-6 sm:h-6 bg-white rounded-full border-2 border-gray-800 flex items-center justify-center"><div class="w-2 h-2 sm:w-3 sm:h-3 bg-gray-800 rounded-full"></div></div>
+                    <div class="flex gap-6 z-10 relative">
+                        <div class="w-6 h-6 bg-white rounded-full border-2 border-gray-800 flex items-center justify-center"><div class="w-3 h-3 bg-gray-800 rounded-full"></div></div>
+                        <div class="w-6 h-6 bg-white rounded-full border-2 border-gray-800 flex items-center justify-center"><div class="w-3 h-3 bg-gray-800 rounded-full"></div></div>
                     </div>
                     <!-- Boca -->
-                    <div id="mouth" class="absolute w-10 sm:w-12 h-5 sm:h-6 bg-red-500 rounded-full bottom-6 sm:bottom-8 z-10 transition-all duration-300"></div>
+                    <div id="mouth" class="absolute w-12 h-6 bg-red-500 rounded-full bottom-8 z-10 transition-all duration-300"></div>
                 </div>
             </div>
             <!-- Mensagem de feedback -->
-            <div id="message" class="h-8 text-center text-lg sm:text-xl font-bold text-gray-600 mb-4 transition-opacity duration-300"></div>
+            <div id="message" class="h-8 text-center text-xl font-bold text-gray-600 mb-4 transition-opacity duration-300"></div>
             <!-- Seleção de Alimentos -->
-            <div id="food-selection" class="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4"></div>
+            <div id="food-selection" class="w-full grid grid-cols-4 gap-4"></div>
         </main>
         
         <!-- Área de Log de Dados -->
         <section class="w-full max-w-lg mt-6">
             <div class="bg-gray-800 text-white rounded-xl p-4">
                 <h2 class="text-lg font-bold mb-2">Log da Sessão Atual (Tempo Real)</h2>
-                <pre id="data-log" class="text-xs h-40 sm:h-48 overflow-y-auto bg-gray-900 p-2 rounded-md"></pre>
+                <pre id="data-log" class="text-xs h-48 overflow-y-auto bg-gray-900 p-2 rounded-md"></pre>
             </div>
         </section>
     </div>
@@ -163,7 +163,7 @@
                 currentParticipantId = `P-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
                 participantIdEl.textContent = currentParticipantId;
                 sessionDataLog = [];
-                mouth.className = "absolute w-10 sm:w-12 h-5 sm:h-6 bg-red-500 rounded-full bottom-6 sm:bottom-8 z-10 transition-all duration-300"; // Reset mouth
+                mouth.className = "absolute w-12 h-6 bg-red-500 rounded-full bottom-8 z-10 transition-all duration-300"; // Reset mouth
                 avatarScale = 0.5; // Define o tamanho inicial
                 avatar.style.transform = `scale(${avatarScale})`; // Aplica o tamanho inicial
                 updateDataLog();
@@ -196,7 +196,7 @@
                     foodEl.draggable = true;
                     foodEl.dataset.type = food.type;
                     foodEl.dataset.name = food.name;
-                    foodEl.innerHTML = `<img src="${food.imageUrl}" alt="${food.name}" class="w-14 h-14 sm:w-20 sm:h-20 object-contain pointer-events-none">`;
+                    foodEl.innerHTML = `<img src="${food.imageUrl}" alt="${food.name}" class="w-20 h-20 object-contain pointer-events-none">`;
                     foodSelectionEl.appendChild(foodEl);
                     foodEl.addEventListener('dragstart', handleDragStart);
                     foodEl.addEventListener('dragend', handleDragEnd);
@@ -332,9 +332,9 @@
                 touchGhostElement.style.left = `${touch.clientX - touchGhostElement.offsetWidth / 2}px`;
                 touchGhostElement.style.top = `${touch.clientY - touchGhostElement.offsetHeight / 2}px`;
 
-                const mouthRect = mouth.getBoundingClientRect();
-                if (touch.clientX > mouthRect.left && touch.clientX < mouthRect.right &&
-                    touch.clientY > mouthRect.top && touch.clientY < mouthRect.bottom) {
+                const avatarRect = avatar.getBoundingClientRect(); // CORREÇÃO: Usar o avatar como alvo
+                if (touch.clientX > avatarRect.left && touch.clientX < avatarRect.right &&
+                    touch.clientY > avatarRect.top && touch.clientY < avatarRect.bottom) {
                     mouth.classList.add('mouth-hover');
                 } else {
                     mouth.classList.remove('mouth-hover');
@@ -349,12 +349,12 @@
                 draggedFoodElement.classList.remove('dragging');
                 
                 const touch = e.changedTouches[0];
-                const mouthRect = mouth.getBoundingClientRect();
+                const avatarRect = avatar.getBoundingClientRect(); // CORREÇÃO: Usar o avatar como alvo
                 
                 mouth.classList.remove('mouth-hover'); 
 
-                if (touch.clientX > mouthRect.left && touch.clientX < mouthRect.right &&
-                    touch.clientY > mouthRect.top && touch.clientY < mouthRect.bottom) {
+                if (touch.clientX > avatarRect.left && touch.clientX < avatarRect.right &&
+                    touch.clientY > avatarRect.top && touch.clientY < avatarRect.bottom) {
                     processSuccessfulDrop(draggedFoodElement);
                 } else {
                     const choiceTime = (Date.now() - choiceStartTime) / 1000;
@@ -363,9 +363,10 @@
                 draggedFoodElement = null;
             }
 
-            mouth.addEventListener('dragover', handleDragOver);
-            mouth.addEventListener('dragleave', handleDragLeave);
-            mouth.addEventListener('drop', handleDrop);
+            // CORREÇÃO: Usar o avatar como alvo para o drop
+            avatar.addEventListener('dragover', handleDragOver);
+            avatar.addEventListener('dragleave', handleDragLeave);
+            avatar.addEventListener('drop', handleDrop);
             
             document.addEventListener('touchmove', handleTouchMove, { passive: false });
             document.addEventListener('touchend', handleTouchEnd);
