@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comidinha (Pesquisa)</title>
+    <title>Comidinha</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +31,7 @@
 
         <!-- Título e Gerenciamento de Sessão -->
         <header class="text-center mb-4">
-            <h1 class="text-4xl md:text-5xl font-black text-emerald-600">Comidinha</h1>
+            <h1 class="text-4xl md:text-5xl font-black text-emerald-600">Comidinha nand</h1>
             <p class="text-lg text-emerald-500">Arraste a comida para a boca do seu amigo!</p>
             <div class="mt-4 p-3 bg-yellow-200 border-2 border-yellow-400 rounded-lg">
                 <span class="font-bold text-sm text-yellow-800">ID do Participante:</span>
@@ -100,7 +100,6 @@
             appId: "SUA_APP_ID"
         };
         
-        // --- INICIALIZAÇÃO DO FIREBASE E DO JOGO ---
         try {
             const app = initializeApp(firebaseConfig);
             const db = getFirestore(app);
@@ -112,7 +111,6 @@
         }
         
         function initializeGame(db) {
-            // --- ELEMENTOS DO DOM ---
             const avatar = document.getElementById('avatar');
             const mouth = document.getElementById('mouth');
             const messageEl = document.getElementById('message');
@@ -124,36 +122,32 @@
             const modalConfirmBtn = document.getElementById('modal-confirm-btn');
             const modalCancelBtn = document.getElementById('modal-cancel-btn');
 
-            // --- ESTADO DO JOGO ---
             let avatarScale = 1;
             let sessionDataLog = [];
             let choiceStartTime = null;
             let draggedFoodElement = null;
             let currentParticipantId = null;
 
-            // --- LISTA DE ALIMENTOS ---
+            // --- LISTA DE ALIMENTOS COM FOTOS REAIS ---
             const foods = [
-                { id: 'food-apple', name: 'Maçã', type: 'healthy', imageUrl: 'https://i.ibb.co/v6TM7Lqt/Maca-PNG-Transparente-Sem-Fundo.png' } ,
+                { id: 'food-apple', name: 'Maçã', type: 'healthy', imageUrl: 'https://i.ibb.co/v6TM7Lqt/Maca-PNG-Transparente-Sem-Fundo.png' },
                 { id: 'food-broccoli', name: 'Brócolis', type: 'healthy', imageUrl: 'https://i.ibb.co/Rpn3136d/Brocolis-png-1024x1024.png' },
-                { id: 'food-carrot', name: 'Cenoura', type: 'healthy', emoji: '🥕' },
-                { id: 'food-fish', name: 'Peixe', type: 'healthy', emoji: '🐟' },
-                { id: 'food-milk', name: 'Leite', type: 'healthy', emoji: '🥛' },
-                { id: 'food-banana', name: 'Banana', type: 'healthy', emoji: '🍌' },
-                { id: 'food-water', name: 'Água', type: 'healthy', emoji: '💧' },
-                { id: 'food-egg', name: 'Ovo', type: 'healthy', emoji: '🥚' },
-                { id: 'food-donut', name: 'Donut', type: 'unhealthy', emoji: '🍩' },
-                { id: 'food-fries', name: 'Batata Frita', type: 'unhealthy', emoji: '🍟' },
-                { id: 'food-pizza', name: 'Pizza', type: 'unhealthy', emoji: '🍕' },
-                { id: 'food-soda', name: 'Refrigerante', type: 'unhealthy', emoji: '🥤' },
-                { id: 'food-cookie', name: 'Biscoito', type: 'unhealthy', emoji: '🍪' },
-                { id: 'food-chocolate', name: 'Chocolate', type: 'unhealthy', emoji: '🍫' },
-                { id: 'food-icecream', name: 'Sorvete', type: 'unhealthy', emoji: '🍦' },
-                { id: 'food-burger', name: 'Hambúrguer', type: 'unhealthy', emoji: '🍔' }
+                { id: 'food-carrot', name: 'Cenoura', type: 'healthy', imageUrl: 'https://i.ibb.co/dKxT9tG/carrot.png' },
+                { id: 'food-fish', name: 'Peixe', type: 'healthy', imageUrl: 'https://i.ibb.co/pwnqC5B/fish.png' },
+                { id: 'food-milk', name: 'Leite', type: 'healthy', imageUrl: 'https://i.ibb.co/hM08NTw/milk.png' },
+                { id: 'food-banana', name: 'Banana', type: 'healthy', imageUrl: 'https://i.ibb.co/Y05bC5p/banana.png' },
+                { id: 'food-water', name: 'Água', type: 'healthy', imageUrl: 'https://i.ibb.co/WpP5r6d/water.png' },
+                { id: 'food-egg', name: 'Ovo', type: 'healthy', imageUrl: 'https://i.ibb.co/RSCyvT9/egg.png' },
+                { id: 'food-donut', name: 'Donut', type: 'unhealthy', imageUrl: 'https://i.ibb.co/4Z5nKz5/donut.png' },
+                { id: 'food-fries', name: 'Batata Frita', type: 'unhealthy', imageUrl: 'https://i.ibb.co/GHYy2Bv/fries.png' },
+                { id: 'food-pizza', name: 'Pizza', type: 'unhealthy', imageUrl: 'https://i.ibb.co/G03v0Vj/pizza.png' },
+                { id: 'food-soda', name: 'Refrigerante', type: 'unhealthy', imageUrl: 'https://i.ibb.co/Qk42S3g/soda.png' },
+                { id: 'food-cookie', name: 'Biscoito', type: 'unhealthy', imageUrl: 'https://i.ibb.co/0JtLq1F/cookie.png' },
+                { id: 'food-chocolate', name: 'Chocolate', type: 'unhealthy', imageUrl: 'https://i.ibb.co/k1K1W9H/chocolate.png' },
+                { id: 'food-icecream', name: 'Sorvete', type: 'unhealthy', imageUrl: 'https://i.ibb.co/RzFp43j/ice-cream.png' },
+                { id: 'food-burger', name: 'Hambúrguer', type: 'unhealthy', imageUrl: 'https://i.ibb.co/6y4nJ08/burger.png' }
             ];
 
-            // --- FUNÇÕES PRINCIPAIS ---
-
-            // Inicia uma nova sessão de pesquisa
             function startNewSession() {
                 currentParticipantId = `P-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
                 participantIdEl.textContent = currentParticipantId;
@@ -163,22 +157,16 @@
                 confirmModal.classList.add('hidden');
             }
 
-            // Salva um evento no Firebase Firestore
             async function saveDataToFirebase(logEntry) {
-                if (!db || !currentParticipantId) {
-                    console.error("Firebase DB ou ID do Participante não está disponível.");
-                    return;
-                }
+                if (!db || !currentParticipantId) return;
                 try {
                     const collectionPath = `pesquisa-nutriamigo/${currentParticipantId}/interacoes`;
                     await addDoc(collection(db, collectionPath), logEntry);
                 } catch (e) {
                     console.error("Erro ao adicionar documento: ", e);
-                    alert("Falha ao salvar dados na nuvem. Verifique a conexão e as regras de segurança do Firestore.");
                 }
             }
             
-            // Embaralha um array
             function shuffleArray(array) {
                 for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
@@ -186,23 +174,23 @@
                 }
             }
             
-            // Renderiza alimentos
+            // --- FUNÇÃO DE RENDERIZAÇÃO ATUALIZADA ---
             function renderFoods(foodsToRender) {
                 foodSelectionEl.innerHTML = '';
                 foodsToRender.forEach(food => {
                     const foodEl = document.createElement('div');
-                    foodEl.className = 'p-4 bg-gray-100 rounded-2xl flex items-center justify-center cursor-grab active:cursor-grabbing transition-transform hover:scale-105';
+                    foodEl.className = 'p-2 bg-gray-100 rounded-2xl flex items-center justify-center cursor-grab active:cursor-grabbing transition-transform hover:scale-105';
                     foodEl.draggable = true;
                     foodEl.dataset.type = food.type;
                     foodEl.dataset.name = food.name;
-                    foodEl.innerHTML = `<span class="text-5xl">${food.emoji}</span>`;
+                    // Alterado para usar <img> em vez de <span> de emoji
+                    foodEl.innerHTML = `<img src="${food.imageUrl}" alt="${food.name}" class="w-16 h-16 sm:w-20 sm:h-20 object-contain pointer-events-none">`;
                     foodSelectionEl.appendChild(foodEl);
                     foodEl.addEventListener('dragstart', handleDragStart);
                     foodEl.addEventListener('dragend', handleDragEnd);
                 });
             }
 
-            // Atualiza a seleção de alimentos
             function refreshFoodSelection() {
                 shuffleArray(foods);
                 const healthyFoods = foods.filter(f => f.type === 'healthy').slice(0, 2);
@@ -212,14 +200,30 @@
                 renderFoods(selectedFoods);
             }
 
-            // Atualiza o log de dados na tela
-            function updateDataLog() {
-                dataLogEl.textContent = JSON.stringify(sessionDataLog, null, 2);
-                dataLogEl.scrollTop = dataLogEl.scrollHeight;
+            function updateDataLog(lastEvent) {
+                // Se for o início da sessão, exibe uma mensagem inicial.
+                if (!lastEvent) {
+                    dataLogEl.textContent = 'Aguardando a primeira interação...\n';
+                    return;
+                }
+
+                // Limpa a mensagem inicial no primeiro evento real.
+                if (sessionDataLog.length === 1) {
+                    dataLogEl.textContent = '';
+                }
+
+                const eventType = lastEvent.event === 'aceito' ? 'aceito' : 'rejeitado';
+                const foodName = lastEvent.foodName;
+                const choiceTime = lastEvent.timeToChoose;
+                const timestamp = new Date(lastEvent.localTimestamp).toLocaleTimeString('pt-BR');
+
+                const logText = `[${timestamp}] Alimento "${foodName}" foi ${eventType} em ${choiceTime}s.\n`;
+
+                dataLogEl.textContent += logText; // Adiciona a nova linha de texto
+                dataLogEl.scrollTop = dataLogEl.scrollHeight; // Rola para o final
             }
 
-            // Registra um evento localmente e envia para o Firebase
-                      function logEvent(eventType, food, choiceTime) {
+            function logEvent(eventType, food, choiceTime) {
                 const logEntry = {
                     serverTimestamp: serverTimestamp(),
                     event: eventType,
@@ -242,7 +246,6 @@
                 setTimeout(() => { messageEl.style.opacity = '0'; }, 2000);
             }
 
-           
             function updateAvatar(type) {
                 avatar.classList.remove('happy', 'sick');
                 void avatar.offsetWidth; 
@@ -258,7 +261,6 @@
                 avatar.style.transform = `scale(${avatarScale})`;
             }
 
-            // --- HANDLERS DE EVENTOS ---
             function handleDragStart(e) {
                 draggedFoodElement = e.target.closest('[draggable]');
                 draggedFoodElement.classList.add('dragging');
@@ -278,14 +280,8 @@
                 draggedFoodElement = null;
             }
 
-            function handleDragOver(e) {
-                e.preventDefault();
-                mouth.classList.add('mouth-hover');
-            }
-
-            function handleDragLeave() {
-                mouth.classList.remove('mouth-hover');
-            }
+            function handleDragOver(e) { e.preventDefault(); mouth.classList.add('mouth-hover'); }
+            function handleDragLeave() { mouth.classList.remove('mouth-hover'); }
 
             function handleDrop(e) {
                 e.preventDefault();
@@ -295,12 +291,11 @@
                     const choiceTime = (Date.now() - choiceStartTime) / 1000;
                     logEvent('aceito', draggedFoodElement, choiceTime);
                     updateAvatar(draggedFoodElement.dataset.type);
-                    draggedFoodElement.style.opacity = '0';
+                    draggedFoodElement.style.display = 'none'; // Esconde o elemento
                     setTimeout(refreshFoodSelection, 500);
                 }
             }
 
-            // --- LISTENERS ---
             mouth.addEventListener('dragover', handleDragOver);
             mouth.addEventListener('dragleave', handleDragLeave);
             mouth.addEventListener('drop', handleDrop);
@@ -309,7 +304,6 @@
             modalCancelBtn.addEventListener('click', () => confirmModal.classList.add('hidden'));
             modalConfirmBtn.addEventListener('click', startNewSession);
 
-            // --- INICIALIZAÇÃO DA SESSÃO ---
             startNewSession();
         }
     </script>
