@@ -31,7 +31,7 @@
 
         <!-- Título e Gerenciamento de Sessão -->
         <header class="text-center mb-4">
-            <h1 class="text-4xl md:text-5xl font-black text-emerald-600">NutriAmigo</h1>
+            <h1 class="text-4xl md:text-5xl font-black text-emerald-600">Comidinha</h1>
             <p class="text-lg text-emerald-500">Arraste a comida para a boca do seu amigo!</p>
             <div class="mt-4 p-3 bg-yellow-200 border-2 border-yellow-400 rounded-lg">
                 <span class="font-bold text-sm text-yellow-800">ID do Participante:</span>
@@ -133,8 +133,8 @@
 
             // --- LISTA DE ALIMENTOS ---
             const foods = [
-                { id: 'food-apple', name: 'Maçã', type: 'healthy', imageUrl: 'https://i.ibb.co/v6TM7Lqt/Maca-PNG-Transparente-Sem-Fundo.png'} ,
-                { id: 'food-broccoli', name: 'Brócolis', type: 'healthy', emoji: '🥦' },
+                { id: 'food-apple', name: 'Maçã', type: 'healthy', imageUrl: 'https://i.ibb.co/v6TM7Lqt/Maca-PNG-Transparente-Sem-Fundo.png' } ,
+                { id: 'food-broccoli', name: 'Brócolis', type: 'healthy', imageUrl: 'https://i.ibb.co/Rpn3136d/Brocolis-png-1024x1024.png' },
                 { id: 'food-carrot', name: 'Cenoura', type: 'healthy', emoji: '🥕' },
                 { id: 'food-fish', name: 'Peixe', type: 'healthy', emoji: '🐟' },
                 { id: 'food-milk', name: 'Leite', type: 'healthy', emoji: '🥛' },
@@ -219,17 +219,19 @@
             }
 
             // Registra um evento localmente e envia para o Firebase
-            function logEvent(eventType, food, choiceTime) {
+                      function logEvent(eventType, food, choiceTime) {
                 const logEntry = {
-                    serverTimestamp: serverTimestamp(), // Pega a data/hora do servidor do Firebase
+                    serverTimestamp: serverTimestamp(),
                     event: eventType,
                     foodName: food.dataset.name,
                     foodType: food.dataset.type,
                     timeToChoose: parseFloat(choiceTime.toFixed(2)),
                 };
-                sessionDataLog.push({...logEntry, localTimestamp: new Date().toISOString()});
-                updateDataLog();
-                saveDataToFirebase(logEntry);
+                // Adiciona o timestamp local para uso imediato na tela
+                const logEntryForDisplay = {...logEntry, localTimestamp: new Date().toISOString()};
+                sessionDataLog.push(logEntryForDisplay);
+                updateDataLog(logEntryForDisplay); // Passa o evento mais recente para ser exibido
+                saveDataToFirebase(logEntry); // Salva o evento sem o timestamp local no Firebase
             }
             
             function showMessage(text, isPositive) {
@@ -240,6 +242,7 @@
                 setTimeout(() => { messageEl.style.opacity = '0'; }, 2000);
             }
 
+           
             function updateAvatar(type) {
                 avatar.classList.remove('happy', 'sick');
                 void avatar.offsetWidth; 
