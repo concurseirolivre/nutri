@@ -61,7 +61,6 @@
                 </div>
             </div>
             <div id="message" class="h-8 text-center text-xl font-bold text-gray-600 mb-4 transition-opacity duration-300"></div>
-            <!-- Layout atualizado para 4 colunas -->
             <div id="food-selection" class="w-full grid grid-cols-4 gap-4"></div>
         </main>
         
@@ -85,7 +84,6 @@
     </div>
     
     <script>
-        // --- INICIALIZAÇÃO DO JOGO ---
         document.addEventListener('DOMContentLoaded', () => {
             initializeGame();
         });
@@ -110,7 +108,6 @@
             let touchGhostElement = null; 
             let avatarScale = 0.5;
 
-            // SUA LISTA DE ALIMENTOS ATUALIZADA com tags sensoriais
             const foods = [
                 { id: 'food-apple', name: 'Maçã', type: 'healthy', imageUrl: 'https://i.ibb.co/v6TM7Lqt/Maca-PNG-Transparente-Sem-Fundo.png', cor: 'vermelho', textura: 'crocante' },
                 { id: 'food-broccoli', name: 'Brócolis', type: 'healthy', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Broccoli_and_cross_section_edit.jpg/330px-Broccoli_and_cross_section_edit.jpg', cor: 'verde', textura: 'macio' },
@@ -153,13 +150,18 @@
                 foodSelectionEl.innerHTML = '';
                 foodsToRender.forEach(food => {
                     const foodEl = document.createElement('div');
-                    foodEl.className = 'p-2 bg-gray-100 rounded-2xl flex items-center justify-center cursor-grab active:cursor-grabbing transition-transform hover:scale-105';
+                    // Alterado para flex-col para empilhar a imagem e o nome
+                    foodEl.className = 'p-2 bg-gray-100 rounded-2xl flex flex-col items-center justify-center cursor-grab active:cursor-grabbing transition-transform hover:scale-105';
                     foodEl.draggable = true;
                     foodEl.dataset.type = food.type;
                     foodEl.dataset.name = food.name;
                     foodEl.dataset.color = food.cor;
                     foodEl.dataset.texture = food.textura;
-                    foodEl.innerHTML = `<img src="${food.imageUrl}" alt="${food.name}" class="w-20 h-20 object-contain pointer-events-none">`;
+                    // Adicionado o nome do alimento abaixo da imagem
+                    foodEl.innerHTML = `
+                        <img src="${food.imageUrl}" alt="${food.name}" class="w-16 h-16 object-contain pointer-events-none">
+                        <span class="text-xs text-center mt-1 text-gray-700 font-semibold">${food.name}</span>
+                    `;
                     foodSelectionEl.appendChild(foodEl);
                     foodEl.addEventListener('dragstart', handleDragStart);
                     foodEl.addEventListener('dragend', handleDragEnd);
